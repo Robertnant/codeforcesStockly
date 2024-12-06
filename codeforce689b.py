@@ -14,6 +14,7 @@ adjList = defaultdict(set)
 for node in range(1, n):
     prevNode = node - 1
     adjList[prevNode].add(node)
+    adjList[node].add(prevNode)
 
 # Add shortcuts
 for (node, nearestNode) in enumerate(shortcuts):
@@ -24,18 +25,18 @@ for (node, nearestNode) in enumerate(shortcuts):
 visited = [False] * n
 startNode = 0
 q = deque()
-q.append((startNode, 0))
+q.append((startNode, 0))    # to the right side
+visited[startNode] = True
 
-time = 0
 timePerNode = [0] * n
 while len(q) != 0:
-    node, time = q.pop()
-    visited[node] = True
+    node, time = q.popleft()    # from the right side
     timePerNode[node] = time
 
     for child in adjList[node]:
         if visited[child] == False:
-            q.append((child, time + 1))
+            visited[child] = True
+            q.append((child, time + 1)) # to the right side
 
 for time in timePerNode:
     print(time, end=" ")
